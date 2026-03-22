@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AgriMitra — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="signup.css"/>
+<style>
+  /* ── SIGNIN-SPECIFIC OVERRIDES ── */
+
+  /* Hide the step indicator — signin is single-step */
+  .steps { display: none; }
+
+  /* Error banner */
+  .error-banner {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--red-light);
+    border: 1.5px solid #f5c6c2;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.85rem;
+    color: var(--red);
+    font-weight: 500;
+    animation: slideIn 0.2s ease;
+  }
+  .error-banner.show { display: flex; }
+  .error-banner svg {
+    width: 16px; height: 16px;
+    stroke: var(--red); stroke-width: 2;
+    flex-shrink: 0;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 1.2rem 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Forgot password link */
+  .forgot-link {
+    display: block;
+    text-align: right;
+    font-size: 0.78rem;
+    color: var(--green);
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 0.3rem;
+    cursor: pointer;
+  }
+  .forgot-link:hover { text-decoration: underline; }
+
+  /* Reset password view */
+  .reset-wrap {
+    background: var(--green-light);
+    border: 1.5px solid #b8ddbf;
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    display: none;
+  }
+  .reset-wrap.show { display: block; }
+  .reset-wrap p {
+    font-size: 0.84rem;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+  }
+  .reset-wrap .reset-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+  .reset-success {
+    display: none;
+    font-size: 0.85rem;
+    color: var(--green);
+    font-weight: 600;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+  .reset-success.show { display: block; }
+  .reset-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+  }
+  .btn-reset {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1rem;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-reset:hover { background: #2e6337; }
+  .btn-reset:disabled { background: var(--muted); cursor: not-allowed; }
+  .btn-reset svg { width: 14px; height: 14px; stroke: #fff; stroke-width: 2; }
+  .btn-cancel-reset {
+    padding: 0.65rem 1rem;
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .btn-cancel-reset:hover { border-color: var(--muted); }
+
+  /* Success state */
+  .signin-success-wrap {
+    text-align: center;
+    padding: 2rem 0;
+    display: none;
+  }
+  .signin-success-wrap.show { display: block; }
+  .signin-success-wrap .success-icon {
+    width: 72px; height: 72px;
+    background: var(--green-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  .signin-success-wrap .success-icon svg {
+    width: 34px; height: 34px;
+    stroke: var(--green); stroke-width: 2;
+  }
+  .signin-success-wrap h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.5rem;
+  }
+  .signin-success-wrap p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  /* Main form area */
+  .signin-form-area { display: block; }
+  .signin-form-area.hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- LEFT PANEL — branding (same as signup) -->
+  <div class="left-panel">
+    <div class="left-inner">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 22V12M12 12C12 7 7 3 3 3c0 5 3.5 9 9 9zM12 12c0-5 5-9 9-9-1 5-4.5 9-9 9z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="logo-text">Agri<span>Mitra</span></span>
+      </div>
+
+      <div class="left-content">
+        <h1>Welcome back, Kisan.</h1>
+        <p>Sign in to access your farm dashboard, listings, loan tracker, and community forum — all in one place.</p>
+
+        <div class="trust-items">
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Your data stays private
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Farm records synced
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Secure login
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            7 regional languages
+          </div>
+        </div>
+      </div>
+
+      <div class="left-footer">
+        © 2025 AgriMitra · Built for Bharat
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL — signin form -->
+  <div class="right-panel">
+    <div class="form-wrap">
+
+      <!-- Step indicator placeholder (hidden via CSS, keeps layout consistent) -->
+      <div class="steps">
+        <div class="step active" id="step-dot-1"><span>1</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-2"><span>2</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-3"><span>3</span></div>
+      </div>
+
+      <!-- SUCCESS VIEW (shown after sign-in) -->
+      <div class="signin-success-wrap" id="signin-success">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22 4 12 14.01 9 11.01" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2>You're signed in!</h2>
+        <p>Taking you to your dashboard…</p>
+        <a href="dashboard.html" class="btn-primary" style="text-decoration:none;">
+          Go to Dashboard
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- MAIN SIGNIN FORM -->
+      <div class="signin-form-area" id="signin-form-area">
+
+        <div class="form-header">
+          <h2>Sign in</h2>
+          <p>Use your registered mobile number and password.</p>
+        </div>
+
+        <!-- Error banner -->
+        <div class="error-banner" id="error-banner">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="8" x2="12" y2="12" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="error-msg">Invalid credentials. Please try again.</span>
+        </div>
+
+        <!-- FORGOT PASSWORD PANEL -->
+        <div class="reset-wrap" id="reset-wrap">
+          <div class="reset-title">Reset your password</div>
+          <p>Enter your registered mobile number. We'll send a reset link to the email address linked to your account.</p>
+          <div class="field">
+            <div class="input-wrap" id="reset-input-wrap">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="prefix">+91</span>
+              <input type="tel" id="reset-phone" placeholder="9876543210" maxlength="10"/>
+            </div>
+            <span class="field-error" id="err-reset-phone"></span>
+          </div>
+          <div class="reset-success" id="reset-success">
+            ✓ Reset link sent! Check the email linked to this number.
+          </div>
+          <div class="reset-actions">
+            <button class="btn-cancel-reset" onclick="cancelReset()">Cancel</button>
+            <button class="btn-reset" id="reset-btn" onclick="sendReset()">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke-linecap="round" stroke-linejoin="round"/><polygon points="22 2 15 22 11 13 2 9 22 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Send Reset Link
+            </button>
+          </div>
+        </div>
+
+        <!-- MOBILE FIELD -->
+        <div class="field">
+          <label>Mobile Number</label>
+          <div class="input-wrap" id="wrap-phone">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="prefix">+91</span>
+            <input type="tel" id="signin-phone" placeholder="9876543210" maxlength="10" autocomplete="tel"/>
+          </div>
+          <span class="field-error" id="err-phone"></span>
+        </div>
+
+        <!-- PASSWORD FIELD -->
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap" id="wrap-password">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11V7a5 5 0 0110 0v4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <input type="password" id="signin-password" placeholder="Your password" autocomplete="current-password"/>
+            <button class="eye-btn" type="button" onclick="togglePwd('signin-password', this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <span class="field-error" id="err-password"></span>
+          <a class="forgot-link" onclick="showReset()">Forgot password?</a>
+        </div>
+
+        <!-- SUBMIT -->
+        <button class="btn-primary" id="signin-btn" onclick="doSignIn()">
+          Sign In
+          <svg viewBox="0 0 24 24" fill="none"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4" stroke-linecap="round" stroke-linejoin="round"/><polyline points="10 17 15 12 10 7" stroke-linecap="round" stroke-linejoin="round"/><line x1="15" y1="12" x2="3" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <p class="signin-link" style="margin-top:1.2rem;">
+          Don't have an account? <a href="signup.html">Register here</a>
+        </p>
+
+      </div><!-- /signin-form-area -->
+
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="signin.js"></script>
+</body>
+</html>

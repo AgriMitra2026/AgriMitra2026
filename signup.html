@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AgriMitra — Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="signup.css"/>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- LEFT PANEL — branding -->
+  <div class="left-panel">
+    <div class="left-inner">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 22V12M12 12C12 7 7 3 3 3c0 5 3.5 9 9 9zM12 12c0-5 5-9 9-9-1 5-4.5 9-9 9z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="logo-text">Agri<span>Mitra</span>
+      </div>
+
+      <div class="left-content">
+        <h1>The bridge every farmer needs.</h1>
+        <p>Credit, markets, cold storage, government schemes — all in one place. Built for India's 140 million farming families.</p>
+
+        <div class="trust-items">
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            No middlemen
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Low-interest credit
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Free to use
+          </div>
+          <div class="trust-item">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            7 regional languages
+          </div>
+        </div>
+      </div>
+
+      <div class="left-footer">
+        © 2025 AgriMitra · Built for Bharat
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL — form -->
+  <div class="right-panel">
+    <div class="form-wrap">
+
+      <!-- Step indicator -->
+      <div class="steps">
+        <div class="step active" id="step-dot-1"><span>1</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-2"><span>2</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="step-dot-3"><span>3</span></div>
+      </div>
+
+      <!-- STEP 1: Account -->
+      <div class="form-step active" id="step-1">
+        <div class="form-header">
+          <h2>Create your account</h2>
+          <p>Step 1 of 3 — Basic details</p>
+        </div>
+
+        <div class="field">
+          <label>Full Name</label>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <input type="text" id="name" placeholder="e.g. Ramesh Kumar" autocomplete="name"/>
+          </div>
+          <span class="field-error" id="err-name"></span>
+        </div>
+
+        <div class="field">
+          <label>Mobile Number</label>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="prefix">+91</span>
+            <input type="tel" id="phone" placeholder="9876543210" maxlength="10" autocomplete="tel"/>
+          </div>
+          <span class="field-error" id="err-phone"></span>
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11V7a5 5 0 0110 0v4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <input type="password" id="password" placeholder="Min 8 characters"/>
+            <button class="eye-btn" type="button" onclick="togglePwd('password', this)" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <div class="pwd-strength" id="pwd-strength">
+            <div class="pwd-bar"><div class="pwd-fill" id="pwd-fill"></div></div>
+            <span id="pwd-label"></span>
+          </div>
+          <span class="field-error" id="err-password"></span>
+        </div>
+
+        <button class="btn-primary" onclick="nextStep(1)">
+          Continue
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <p class="signin-link">Already have an account? <a href="#">Sign in</a></p>
+      </div>
+
+      <!-- STEP 2: Farm Details -->
+      <div class="form-step" id="step-2">
+        <div class="form-header">
+          <h2>Your farm details</h2>
+          <p>Step 2 of 3 — Location & land</p>
+        </div>
+
+        <div class="field">
+          <label>Village / Town</label>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <input type="text" id="village" placeholder="e.g. Dharwad"/>
+          </div>
+          <span class="field-error" id="err-village"></span>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>District</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <input type="text" id="district" placeholder="e.g. Dharwad"/>
+            </div>
+            <span class="field-error" id="err-district"></span>
+          </div>
+          <div class="field">
+            <label>State</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <select id="state">
+                <option value="">Select state</option>
+                <option>Andhra Pradesh</option><option>Assam</option><option>Bihar</option>
+                <option>Chhattisgarh</option><option>Gujarat</option><option>Haryana</option>
+                <option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option>
+                <option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option>
+                <option>Odisha</option><option>Punjab</option><option>Rajasthan</option>
+                <option>Tamil Nadu</option><option>Telangana</option><option>Uttar Pradesh</option>
+                <option>Uttarakhand</option><option>West Bengal</option><option>Other</option>
+              </select>
+            </div>
+            <span class="field-error" id="err-state"></span>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Land Holding (acres)</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 22V12M12 12C12 7 7 3 3 3c0 5 3.5 9 9 9zM12 12c0-5 5-9 9-9-1 5-4.5 9-9 9z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <input type="number" id="land" placeholder="e.g. 2" min="0" step="0.5"/>
+            </div>
+            <span class="field-error" id="err-land"></span>
+          </div>
+          <div class="field">
+            <label>Primary Crop</label>
+            <div class="input-wrap">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 22V12M12 12C12 7 7 3 3 3c0 5 3.5 9 9 9zM12 12c0-5 5-9 9-9-1 5-4.5 9-9 9z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <select id="crop">
+                <option value="">Select crop</option>
+                <option>Paddy / Rice</option><option>Wheat</option><option>Maize</option>
+                <option>Cotton</option><option>Sugarcane</option><option>Tomato</option>
+                <option>Onion</option><option>Potato</option><option>Soybean</option>
+                <option>Groundnut</option><option>Mixed / Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-outline" onclick="prevStep(2)">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Back
+          </button>
+          <button class="btn-primary" onclick="nextStep(2)">
+            Continue
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Language & Confirm -->
+      <div class="form-step" id="step-3">
+        <div class="form-header">
+          <h2>Almost done!</h2>
+          <p>Step 3 of 3 — Language preference</p>
+        </div>
+
+        <div class="field">
+          <label>Preferred Language</label>
+          <div class="lang-grid">
+            <div class="lang-opt active" data-lang="en" onclick="selectLang(this)">
+              <span class="lang-name">English</span>
+              <span class="lang-native">English</span>
+            </div>
+            <div class="lang-opt" data-lang="hi" onclick="selectLang(this)">
+              <span class="lang-name">Hindi</span>
+              <span class="lang-native">हिंदी</span>
+            </div>
+            <div class="lang-opt" data-lang="mr" onclick="selectLang(this)">
+              <span class="lang-name">Marathi</span>
+              <span class="lang-native">मराठी</span>
+            </div>
+            <div class="lang-opt" data-lang="ta" onclick="selectLang(this)">
+              <span class="lang-name">Tamil</span>
+              <span class="lang-native">தமிழ்</span>
+            </div>
+            <div class="lang-opt" data-lang="te" onclick="selectLang(this)">
+              <span class="lang-name">Telugu</span>
+              <span class="lang-native">తెలుగు</span>
+            </div>
+            <div class="lang-opt" data-lang="kn" onclick="selectLang(this)">
+              <span class="lang-name">Kannada</span>
+              <span class="lang-native">ಕನ್ನಡ</span>
+            </div>
+            <div class="lang-opt" data-lang="bn" onclick="selectLang(this)">
+              <span class="lang-name">Bengali</span>
+              <span class="lang-native">বাংলা</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Referral Code <span class="optional">(optional)</span></label>
+          <div class="input-wrap">
+            <svg viewBox="0 0 24 24" fill="none"><polyline points="10 9 9 9 8 9" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="5" width="20" height="14" rx="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <input type="text" id="referral" placeholder="Enter referral code" style="text-transform:uppercase;"/>
+          </div>
+        </div>
+
+        <div class="terms-wrap">
+          <label class="checkbox-label">
+            <input type="checkbox" id="terms"/>
+            <span class="checkmark"></span>
+            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+          </label>
+          <span class="field-error" id="err-terms"></span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-outline" onclick="prevStep(3)">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Back
+          </button>
+          <button class="btn-primary" id="submit-btn" onclick="submitForm()">
+            Create Account
+            <svg viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22 4 12 14.01 9 11.01" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- SUCCESS STATE -->
+      <div class="form-step" id="step-success">
+        <div class="success-wrap">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22 4 12 14.01 9 11.01" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h2>Account created!</h2>
+          <p id="success-msg">Welcome to AgriMitra, <strong id="success-name"></strong>. Your farm profile is ready.</p>
+          <a href="dashboard.html" class="btn-primary" style="text-decoration:none;margin-top:0.5rem;">
+            Go to Dashboard
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script type="module" src="signup.js"></script>
+</body>
+</html>

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AgriMitra — Farmer Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="dashboard.css"/>
+<!-- Apply dark mode BEFORE page renders to prevent flash -->
+<script>
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.documentElement.classList.add('dark');
+  }
+</script>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 22V12M12 12C12 7 7 3 3 3c0 5 3.5 9 9 9zM12 12c0-5 5-9 9-9-1 5-4.5 9-9 9z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div><div class="sidebar-logo-text">Agri<span>Mitra</span></div><div class="sidebar-logo-sub">Bridging Farmers & Markets</div></div>
+  </div>
+  <div class="sidebar-farmer" onclick="goTo('profile')" title="View Profile">
+    <div class="farmer-avatar" id="sb-avatar">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div class="farmer-name" id="sb-farmer-name">Loading…</div>
+      <div class="farmer-loc" id="sb-farmer-loc">—</div>
+    </div>
+    <svg style="width:14px;height:14px;stroke:var(--muted);stroke-width:2;flex-shrink:0;" viewBox="0 0 24 24" fill="none"><polyline points="9 18 15 12 9 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+
+  <div class="sidebar-section-label" data-i18n="nav_main">Main</div>
+  <div class="nav-item active" data-page="home"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="3" width="7" height="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="14" width="7" height="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="14" width="7" height="7" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_dashboard">Dashboard</span></div>
+  <div class="nav-item" data-page="diary"><svg viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_diary">Farm Diary</span></div>
+
+  <div class="sidebar-section-label" data-i18n="nav_commerce">Commerce</div>
+  <div class="nav-item" data-page="buy"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 10a4 4 0 01-8 0" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_buy">Buy Inputs</span></div>
+  <div class="nav-item" data-page="sell"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_sell">Sell Produce</span></div>
+  <div class="nav-item" data-page="storage"><svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_storage">Cold Storage</span></div>
+
+  <div class="sidebar-section-label" data-i18n="nav_finance">Finance & Welfare</div>
+  <div class="nav-item" data-page="credit"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="1" x2="12" y2="23" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_credit">Credit & Loans</span></div>
+  <div class="nav-item" data-page="schemes"><svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_schemes">Govt Schemes</span></div>
+  <div class="nav-item" data-page="training"><svg viewBox="0 0 24 24" fill="none"><path d="M22 10v6M2 10l10-5 10 5-10 5z" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12v5c3 3 9 3 12 0v-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_training">Training</span></div>
+
+  <div class="sidebar-section-label" data-i18n="nav_community">Community</div>
+  <div class="nav-item" data-page="forum"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_forum">Forum</span></div>
+  <div class="nav-item" data-page="profile"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>My Profile</span></div>
+
+  <div class="sidebar-section-label">Info Centre</div>
+  <div class="nav-item" data-page="info"><svg viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-linecap="round" stroke-linejoin="round"/></svg><span>MSP Prices</span></div>
+
+  <div class="sidebar-bottom">
+    <button class="helpline-btn" onclick="openModal()" style="margin-bottom:.6rem;">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span data-i18n="helplines">Helplines</span>
+    </button>
+    <!-- SIGN OUT BUTTON IN SIDEBAR -->
+    <button class="signout-btn" onclick="confirmSignOut()">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16 17 21 12 16 7" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Sign Out</span>
+    </button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="topbar-right">
+
+      <!-- DARK MODE TOGGLE -->
+      <button class="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="12" y1="1"  x2="12" y2="3"  stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="12" y1="21" x2="12" y2="23" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="4.22"  y1="4.22"  x2="5.64"  y2="5.64"  stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="1"  y1="12" x2="3"  y2="12" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="21" y1="12" x2="23" y2="12" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"  stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <!-- LANGUAGE DROPDOWN -->
+      <div class="lang-dropdown" id="langDropdown">
+        <div class="lang-toggle" onclick="toggleLangMenu()">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-linecap="round" stroke-linejoin="round"/><line x1="2" y1="12" x2="22" y2="12" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="lang-label">EN</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none"><polyline points="6 9 12 15 18 9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="lang-menu" id="langMenu">
+          <div class="lang-option active" data-lang="en" onclick="setLang('en')">English <span class="lang-native">English</span></div>
+          <div class="lang-option" data-lang="hi" onclick="setLang('hi')">Hindi <span class="lang-native">हिंदी</span></div>
+          <div class="lang-option" data-lang="mr" onclick="setLang('mr')">Marathi <span class="lang-native">मराठी</span></div>
+          <div class="lang-option" data-lang="ta" onclick="setLang('ta')">Tamil <span class="lang-native">தமிழ்</span></div>
+          <div class="lang-option" data-lang="te" onclick="setLang('te')">Telugu <span class="lang-native">తెలుగు</span></div>
+          <div class="lang-option" data-lang="kn" onclick="setLang('kn')">Kannada <span class="lang-native">ಕನ್ನಡ</span></div>
+          <div class="lang-option" data-lang="bn" onclick="setLang('bn')">Bengali <span class="lang-native">বাংলা</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-content">
+
+    <!-- ── HOME ── -->
+    <div class="page active" id="page-home">
+
+      <div class="farmer-hero">
+        <div class="hero-avatar" id="hero-avatar" onclick="goTo('profile')" title="Edit profile">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="hero-avatar-edit"><svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="hero-info">
+          <h2 id="hero-name">Loading…</h2>
+          <div class="hero-meta">
+            <span><svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="hero-loc-text">—</span></span>
+            <span><svg viewBox="0 0 24 24" fill="none"><path d="M12 22V12M12 12C12 7 7 3 3 3c0 5 3.5 9 9 9zM12 12c0-5 5-9 9-9-1 5-4.5 9-9 9z" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="hero-crop-text">—</span></span>
+            <span><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="hero-land-text">—</span></span>
+          </div>
+        </div>
+        <button class="hero-edit-btn" onclick="goTo('profile')">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Edit
+        </button>
+      </div>
+
+      <div class="grid-4 stat-cards-grid section-gap">
+        <div class="stat-card green-accent"><div class="sc-label"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="1" x2="12" y2="23" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="stat_income">Income</span></div><div class="sc-val" id="stat-income">₹0</div><div class="sc-sub" data-i18n="stat_income_sub">from sell listings</div></div>
+        <div class="stat-card amber-accent"><div class="sc-label"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="stat_listings">Listings</span></div><div class="sc-val" id="stat-listings">0</div><div class="sc-sub" data-i18n="stat_listings_sub">produce listed for sale</div></div>
+        <div class="stat-card green-accent"><div class="sc-label"><svg viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="stat_diary">Diary</span></div><div class="sc-val" id="stat-diary">0</div><div class="sc-sub" data-i18n="stat_diary_sub">farm activities logged</div></div>
+        <div class="stat-card amber-accent"><div class="sc-label"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="stat_posts">Posts</span></div><div class="sc-val" id="stat-posts">0</div><div class="sc-sub" data-i18n="stat_posts_sub">shared with community</div></div>
+      </div>
+
+      <p class="section-label-sm" data-i18n="quick_actions">Quick Actions</p>
+      <div class="quick-actions section-gap">
+        <div class="qa-btn" onclick="goTo('sell')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="qa-label" data-i18n="qa_list">List Produce</div></div>
+        <div class="qa-btn" onclick="goTo('buy')"><div class="qa-icon amber"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 10a4 4 0 01-8 0" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="qa-label" data-i18n="qa_buy">Buy Inputs</div></div>
+        <div class="qa-btn" onclick="goTo('diary')"><div class="qa-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="qa-label" data-i18n="qa_diary">Farm Diary</div></div>
+        <div class="qa-btn" onclick="goTo('schemes')"><div class="qa-icon amber"><svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="qa-label" data-i18n="qa_schemes">Schemes</div></div>
+        <div class="qa-btn" onclick="goTo('credit')"><div class="qa-icon blue"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="1" x2="12" y2="23" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="qa-label" data-i18n="nav_credit">Credit</div></div>
+        <div class="qa-btn" onclick="goTo('storage')"><div class="qa-icon teal"><svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="qa-label" data-i18n="nav_storage">Storage</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><svg viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="recent_activity">Recent Activity</span></div>
+        <div id="home-activity-list"></div>
+      </div>
+    </div>
+
+    <!-- ── BUY ── -->
+    <div class="page" id="page-buy">
+      <div class="page-header"><h2 data-i18n="buy_title">Buy Inputs</h2><p data-i18n="buy_sub">Add items you need. This is your shopping list.</p></div>
+      <div class="card section-gap">
+        <div class="card-title"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="buy_form_title">Add Item to List</span></div>
+        <div class="grid-2" style="gap:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="item_name">Item Name</label><input class="form-input" id="buy-name" data-i18n-ph="item_name_ph" placeholder="e.g. DAP Fertiliser"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="category">Category</label>
+            <select class="form-select" id="buy-cat">
+              <option value="" data-i18n-opt="select">Select</option>
+              <option data-i18n-opt="opt_seeds">Seeds</option><option data-i18n-opt="opt_fert">Fertiliser</option><option data-i18n-opt="opt_pest">Pesticide</option><option data-i18n-opt="opt_tools">Tools</option><option data-i18n-opt="opt_mach">Machinery</option><option data-i18n-opt="opt_other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2" style="gap:.8rem;margin-top:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="qty_unit">Quantity &amp; Unit</label><input class="form-input" id="buy-qty" data-i18n-ph="qty_unit_ph" placeholder="e.g. 50 kg"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="est_price">Estimated Price (₹)</label><input class="form-input" id="buy-price" data-i18n-ph="est_price_ph" placeholder="e.g. 1350" type="number"/></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="addBuyItem()"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="add_item">Add to List</span></button>
+      </div>
+      <p class="section-label-sm" data-i18n="my_input_list">My Input List</p>
+      <div class="row-gap" id="buy-list"></div>
+    </div>
+
+    <!-- ── SELL ── -->
+    <div class="page" id="page-sell">
+      <div class="page-header"><h2 data-i18n="sell_title">Sell Produce</h2><p data-i18n="sell_sub">List your harvest for direct sale to buyers nearby. No middlemen.</p></div>
+      <div class="card section-gap">
+        <div class="card-title"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="new_listing">New Listing</span></div>
+        <div class="grid-2" style="gap:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="produce_name">Produce Name</label><input class="form-input" id="sell-name" data-i18n-ph="produce_name_ph" placeholder="e.g. Fresh Tomatoes"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="qty_kg">Quantity (kg)</label><input class="form-input" id="sell-qty" data-i18n-ph="ph_eg50" placeholder="e.g. 50" type="number"/></div>
+        </div>
+        <div class="grid-2" style="gap:.8rem;margin-top:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="price_kg">Price per kg (₹)</label><input class="form-input" id="sell-price" data-i18n-ph="ph_eg25" placeholder="e.g. 25" type="number"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="harvest_date">Harvest Date</label><input class="form-input" id="sell-date" type="date"/></div>
+        </div>
+        <div class="form-row" style="margin-top:.8rem;margin-bottom:0"><label class="form-label" data-i18n="description">Description (optional)</label><textarea class="form-textarea" id="sell-desc" data-i18n-ph="desc_ph" placeholder="Freshly harvested, organic..."></textarea></div>
+        <button class="btn btn-primary" style="margin-top:1rem;width:100%;justify-content:center" onclick="addSellListing()"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="post_listing">Post Listing</span></button>
+      </div>
+      <p class="section-label-sm" data-i18n="active_listings">Your Active Listings</p>
+      <div class="row-gap" id="sell-list"></div>
+    </div>
+
+    <!-- ── STORAGE ── -->
+    <div class="page" id="page-storage">
+      <div class="page-header"><h2 data-i18n="storage_title">Cold Storage</h2><p data-i18n="storage_sub">Add nearby cold storage facilities you know about.</p></div>
+      <div class="map-container" id="map-container">
+        <div class="map-header">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Nearby Agricultural Points</span>
+          <span class="map-loc-label" id="map-loc-label">Locating…</span>
+          <button class="map-refresh-btn" onclick="initMap()" title="Refresh location">
+            <svg viewBox="0 0 24 24" fill="none"><polyline points="23 4 23 10 17 10" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="map-frame-wrap" id="map-frame-wrap">
+          <div class="map-loading" id="map-loading">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <p>Getting your location…</p>
+            <span>Allow location access when your browser asks</span>
+          </div>
+        </div>
+        <div class="map-legend">
+          <span>🌾 Farms</span>
+          <span>🌱 Agri Shops</span>
+          <span>🛒 Markets</span>
+          <span>🧊 Cold Storage</span>
+          <span>🏦 Banks</span>
+          <span>🤝 Cooperatives</span>
+          <span>💧 Irrigation</span>
+          <span>🐄 Veterinary</span>
+        </div>
+      </div>
+      <div class="card section-gap">
+        <div class="card-title"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="add_storage">Add Storage Facility</span></div>
+        <div class="grid-2" style="gap:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="facility_name">Facility Name</label><input class="form-input" id="storage-name" data-i18n-ph="facility_ph" placeholder="e.g. Karnataka Cold Chain"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="distance">Distance</label><input class="form-input" id="storage-dist" data-i18n-ph="dist_ph" placeholder="e.g. 2.4 km away"/></div>
+        </div>
+        <div class="grid-2" style="gap:.8rem;margin-top:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="contact">Contact / Phone</label><input class="form-input" id="storage-phone" data-i18n-ph="contact_ph" placeholder="e.g. 9876543210"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="capacity">Capacity / Notes</label><input class="form-input" id="storage-cap" data-i18n-ph="cap_ph" placeholder="e.g. 10 tonnes available"/></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="addStorage()"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="save_facility">Save Facility</span></button>
+      </div>
+      <p class="section-label-sm" data-i18n="saved_facilities">Saved Facilities</p>
+      <div class="row-gap" id="storage-list"></div>
+    </div>
+
+    <!-- ── CREDIT ── -->
+    <div class="page" id="page-credit">
+      <div class="page-header"><h2 data-i18n="credit_title">Credit & Loans</h2><p data-i18n="credit_sub">Track your loan applications and repayments.</p></div>
+      <div class="card section-gap">
+        <div class="card-title"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="1" x2="12" y2="23" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="add_loan">Add Loan / Application</span></div>
+        <div class="grid-2" style="gap:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="loan_purpose">Loan Purpose</label><input class="form-input" id="loan-purpose" data-i18n-ph="loan_purpose_ph" placeholder="e.g. Kharif seed purchase"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="amount">Amount (₹)</label><input class="form-input" id="loan-amount" data-i18n-ph="amount_ph" placeholder="e.g. 20000" type="number"/></div>
+        </div>
+        <div class="grid-2" style="gap:.8rem;margin-top:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="lender">Lender / Source</label><input class="form-input" id="loan-lender" data-i18n-ph="lender_ph" placeholder="e.g. SBI, Cooperative Bank"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="status">Status</label>
+            <select class="form-select" id="loan-status">
+              <option data-i18n-opt="loan_applied">Applied</option><option data-i18n-opt="loan_approved">Approved</option><option data-i18n-opt="loan_active">Active</option><option data-i18n-opt="loan_repaid">Repaid</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:.8rem;margin-bottom:0"><label class="form-label" data-i18n="loan_notes">Notes</label><textarea class="form-textarea" id="loan-notes" data-i18n-ph="loan_notes_ph" placeholder="e.g. 8% p.a., 12 months..."></textarea></div>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="addLoan()"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="save_loan">Save Loan</span></button>
+      </div>
+      <p class="section-label-sm" data-i18n="your_loans">Your Loans</p>
+      <div class="row-gap" id="loan-list"></div>
+    </div>
+
+    <!-- ── SCHEMES ── -->
+    <div class="page" id="page-schemes">
+      <div class="page-header">
+        <h2 data-i18n="schemes_title">Government Schemes</h2>
+        <p>Answer 7 quick questions — we'll tell you exactly which schemes you qualify for.</p>
+      </div>
+
+      <!-- QUIZ SHELL -->
+      <div id="quiz-shell">
+
+        <!-- STEP 0: Start -->
+        <div class="quiz-step active" id="quiz-step-0">
+          <div class="quiz-start-card">
+            <div class="quiz-start-emoji">🌾</div>
+            <h3>Find Your Schemes</h3>
+            <p>Takes under a minute. We'll match you to PM-KISAN, crop insurance, organic farming grants, machinery subsidies and more — based on your real situation.</p>
+            <button class="quiz-start-btn" onclick="startQuiz()">
+              Let's Go
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Q1: Land -->
+        <div class="quiz-step" id="quiz-step-1">
+          <div class="quiz-progress"><div class="quiz-progress-fill" style="width:14%"></div></div>
+          <div class="quiz-q-num">Question 1 of 7</div>
+          <div class="quiz-question">How much land do you own or cultivate?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" data-q="land" data-v="under2" onclick="selectOpt(this)">🌱 Less than 2 acres <span class="quiz-opt-sub">Very small holding</span></div>
+            <div class="quiz-opt" data-q="land" data-v="2to5" onclick="selectOpt(this)">🌿 2 – 5 acres <span class="quiz-opt-sub">Marginal farmer</span></div>
+            <div class="quiz-opt" data-q="land" data-v="5to10" onclick="selectOpt(this)">🌳 5 – 10 acres <span class="quiz-opt-sub">Small farmer</span></div>
+            <div class="quiz-opt" data-q="land" data-v="above10" onclick="selectOpt(this)">🏞️ More than 10 acres <span class="quiz-opt-sub">Large holding</span></div>
+          </div>
+          <div class="quiz-nav">
+            <button class="quiz-back-btn" onclick="quizBack(1)" style="visibility:hidden">Back</button>
+            <button class="quiz-next-btn" id="quiz-next-1" onclick="quizNext(1)" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- Q2: Age -->
+        <div class="quiz-step" id="quiz-step-2">
+          <div class="quiz-progress"><div class="quiz-progress-fill" style="width:28%"></div></div>
+          <div class="quiz-q-num">Question 2 of 7</div>
+          <div class="quiz-question">How old are you?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" data-q="age" data-v="under18" onclick="selectOpt(this)">👦 Under 18</div>
+            <div class="quiz-opt" data-q="age" data-v="18to40" onclick="selectOpt(this)">🧑 18 – 40 years</div>
+            <div class="quiz-opt" data-q="age" data-v="40to60" onclick="selectOpt(this)">👨 41 – 60 years</div>
+            <div class="quiz-opt" data-q="age" data-v="above60" onclick="selectOpt(this)">👴 Above 60 years</div>
+          </div>
+          <div class="quiz-nav">
+            <button class="quiz-back-btn" onclick="quizBack(2)">← Back</button>
+            <button class="quiz-next-btn" id="quiz-next-2" onclick="quizNext(2)" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- Q3: Govt job -->
+        <div class="quiz-step" id="quiz-step-3">
+          <div class="quiz-progress"><div class="quiz-progress-fill" style="width:42%"></div></div>
+          <div class="quiz-q-num">Question 3 of 7</div>
+          <div class="quiz-question">Do you or your spouse work in the government?</div>
+          <div class="quiz-hint">Includes government employees, officers, and elected representatives</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" data-q="govt" data-v="no" onclick="selectOpt(this)">✅ No — we're farmers only</div>
+            <div class="quiz-opt" data-q="govt" data-v="yes" onclick="selectOpt(this)">❌ Yes — one of us works in government</div>
+          </div>
+          <div class="quiz-nav">
+            <button class="quiz-back-btn" onclick="quizBack(3)">← Back</button>
+            <button class="quiz-next-btn" id="quiz-next-3" onclick="quizNext(3)" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- Q4: Pension -->
+        <div class="quiz-step" id="quiz-step-4">
+          <div class="quiz-progress"><div class="quiz-progress-fill" style="width:57%"></div></div>
+          <div class="quiz-q-num">Question 4 of 7</div>
+          <div class="quiz-question">Does anyone in your family receive a monthly pension?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" data-q="pension" data-v="none" onclick="selectOpt(this)">✅ No pension received</div>
+            <div class="quiz-opt" data-q="pension" data-v="low" onclick="selectOpt(this)">✅ Yes, but less than ₹10,000/month</div>
+            <div class="quiz-opt" data-q="pension" data-v="high" onclick="selectOpt(this)">❌ Yes, ₹10,000 or more per month</div>
+          </div>
+          <div class="quiz-nav">
+            <button class="quiz-back-btn" onclick="quizBack(4)">← Back</button>
+            <button class="quiz-next-btn" id="quiz-next-4" onclick="quizNext(4)" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- Q5: Profession -->
+        <div class="quiz-step" id="quiz-step-5">
+          <div class="quiz-progress"><div class="quiz-progress-fill" style="width:71%"></div></div>
+          <div class="quiz-q-num">Question 5 of 7</div>
+          <div class="quiz-question">Does anyone in your family practice a professional occupation?</div>
+          <div class="quiz-hint">Doctors, lawyers, engineers, chartered accountants, architects, etc.</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" data-q="profession" data-v="no" onclick="selectOpt(this)">✅ No — not in a professional occupation</div>
+            <div class="quiz-opt" data-q="profession" data-v="yes" onclick="selectOpt(this)">❌ Yes — someone is a licensed professional</div>
+          </div>
+          <div class="quiz-nav">
+            <button class="quiz-back-btn" onclick="quizBack(5)">← Back</button>
+            <button class="quiz-next-btn" id="quiz-next-5" onclick="quizNext(5)" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- Q6: Income tax -->
+        <div class="quiz-step" id="quiz-step-6">
+          <div class="quiz-progress"><div class="quiz-progress-fill" style="width:85%"></div></div>
+          <div class="quiz-q-num">Question 6 of 7</div>
+          <div class="quiz-question">Did anyone in your family pay income tax last year?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" data-q="tax" data-v="no" onclick="selectOpt(this)">✅ No — income below taxable limit</div>
+            <div class="quiz-opt" data-q="tax" data-v="yes" onclick="selectOpt(this)">❌ Yes — we filed and paid income tax</div>
+          </div>
+          <div class="quiz-nav">
+            <button class="quiz-back-btn" onclick="quizBack(6)">← Back</button>
+            <button class="quiz-next-btn" id="quiz-next-6" onclick="quizNext(6)" disabled>Next →</button>
+          </div>
+        </div>
+
+        <!-- Q7: Farming type -->
+        <div class="quiz-step" id="quiz-step-7">
+          <div class="quiz-progress"><div class="quiz-progress-fill" style="width:100%"></div></div>
+          <div class="quiz-q-num">Question 7 of 7</div>
+          <div class="quiz-question">What best describes your farming?</div>
+          <div class="quiz-options">
+            <div class="quiz-opt" data-q="farming" data-v="cultivable" onclick="selectOpt(this)">🌾 Regular food crops — wheat, rice, vegetables, pulses</div>
+            <div class="quiz-opt" data-q="farming" data-v="organic" onclick="selectOpt(this)">🌿 Organic farming or keen to switch to organic</div>
+            <div class="quiz-opt" data-q="farming" data-v="mixed" onclick="selectOpt(this)">🌱 Mixed — some organic, some regular</div>
+            <div class="quiz-opt" data-q="farming" data-v="mechanized" onclick="selectOpt(this)">🚜 I want to buy farm machinery or equipment</div>
+          </div>
+          <div class="quiz-nav">
+            <button class="quiz-back-btn" onclick="quizBack(7)">← Back</button>
+            <button class="quiz-next-btn" id="quiz-next-7" onclick="quizNext(7)" disabled>See My Results 🎉</button>
+          </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="quiz-step" id="quiz-results">
+          <div class="quiz-results-header">
+            <div class="quiz-results-emoji" id="results-emoji">🎯</div>
+            <h3 id="results-title">Your Scheme Matches</h3>
+            <p id="results-sub">Based on your answers</p>
+            <button class="quiz-retake-btn" onclick="retakeQuiz()">
+              <svg viewBox="0 0 24 24" fill="none"><polyline points="23 4 23 10 17 10" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Retake Quiz
+            </button>
+          </div>
+          <div id="scheme-eligibility-list" class="row-gap section-gap"></div>
+        </div>
+
+      </div><!-- /quiz-shell -->
+
+      <!-- DIVIDER -->
+      <div class="schemes-divider">
+        <div></div>
+        <span>Track Your Applications</span>
+        <div></div>
+      </div>
+
+      <!-- TRACKER -->
+      <div class="card section-gap">
+        <div class="card-title"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="track_scheme">Track a Scheme</span></div>
+        <div class="grid-2" style="gap:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="scheme_name">Scheme Name</label><input class="form-input" id="scheme-name" data-i18n-ph="scheme_name_ph" placeholder="e.g. PM-KISAN"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="status">Status</label>
+            <select class="form-select" id="scheme-status">
+              <option data-i18n-opt="status_want">Want to Apply</option><option data-i18n-opt="status_applied">Applied</option><option data-i18n-opt="status_docs">Documents Submitted</option><option data-i18n-opt="status_approved">Approved</option><option data-i18n-opt="status_rejected">Rejected</option><option data-i18n-opt="status_received">Received Benefit</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2" style="gap:.8rem;margin-top:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="benefit">Benefit Amount</label><input class="form-input" id="scheme-benefit" data-i18n-ph="benefit_ph" placeholder="e.g. ₹6,000/year"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="applied_on">Applied On</label><input class="form-input" id="scheme-date" type="date"/></div>
+        </div>
+        <div class="form-row" style="margin-top:.8rem;margin-bottom:0"><label class="form-label" data-i18n="scheme_notes">Notes</label><textarea class="form-textarea" id="scheme-notes" data-i18n-ph="scheme_notes_ph" placeholder="Documents needed, follow-up required, etc."></textarea></div>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="addScheme()"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="save_scheme">Save</span></button>
+      </div>
+      <p class="section-label-sm" data-i18n="my_schemes">My Schemes</p>
+      <div class="row-gap" id="scheme-list"></div>
+    </div>
+
+    <!-- ── TRAINING ── -->
+    <div class="page" id="page-training">
+      <div class="page-header"><h2 data-i18n="training_title">Training & Expert Support</h2><p data-i18n="training_sub">Save links to training videos and expert resources you find useful.</p></div>
+      <div class="card section-gap">
+        <div class="card-title"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="save_resource">Save a Resource</span></div>
+        <div class="grid-2" style="gap:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="title_label">Title</label><input class="form-input" id="train-title" data-i18n-ph="title_ph" placeholder="e.g. Tomato Cultivation Guide"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="category">Category</label>
+            <select class="form-select" id="train-cat">
+              <option value="" data-i18n-opt="select">Select</option>
+              <option data-i18n-opt="opt_crop_mgmt">Crop Management</option><option data-i18n-opt="opt_pest_ctrl">Pest Control</option><option data-i18n-opt="opt_irr">Irrigation</option><option data-i18n-opt="opt_postharvest">Post-Harvest</option><option data-i18n-opt="opt_finance">Finance</option><option data-i18n-opt="opt_other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:.8rem;margin-bottom:0"><label class="form-label" data-i18n="link_source">Link / Source (optional)</label><input class="form-input" id="train-link" data-i18n-ph="link_ph" placeholder="e.g. YouTube link or expert name"/></div>
+        <div class="form-row" style="margin-top:.8rem;margin-bottom:0"><label class="form-label" data-i18n="notes">Notes</label><textarea class="form-textarea" id="train-notes" data-i18n-ph="notes_ph" placeholder="Key takeaways, things to try..."></textarea></div>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="addTraining()"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="save_res_btn">Save Resource</span></button>
+      </div>
+      <p class="section-label-sm" data-i18n="saved_resources">Saved Resources</p>
+      <div class="grid-3" id="training-list" style="gap:1rem"></div>
+    </div>
+
+    <!-- ── DIARY ── -->
+    <div class="page" id="page-diary">
+      <div class="page-header"><h2 data-i18n="diary_title">Farm Diary</h2><p data-i18n="diary_sub">Log your daily farm activities, inputs and observations.</p></div>
+      <div class="card section-gap">
+        <div class="card-title"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="new_entry">New Entry</span></div>
+        <div class="grid-2" style="gap:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="activity">Activity</label><input class="form-input" id="diary-activity" data-i18n-ph="activity_ph" placeholder="e.g. Sowed wheat in Field A"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="date">Date</label><input class="form-input" id="diary-date" type="date"/></div>
+        </div>
+        <div class="grid-2" style="gap:.8rem;margin-top:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="crop">Crop</label><input class="form-input" id="diary-crop" data-i18n-ph="crop_ph" placeholder="e.g. Wheat, Tomato, Paddy"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="tag_label">Tag</label>
+            <select class="form-select" id="diary-tag">
+              <option value="green" data-i18n-opt="tag_general">General</option><option value="amber" data-i18n-opt="tag_sowing">Sowing</option><option value="amber" data-i18n-opt="tag_harvest">Harvest</option><option value="red" data-i18n-opt="tag_pest">Pest Alert</option><option value="green" data-i18n-opt="tag_irrigation">Irrigation</option><option value="amber" data-i18n-opt="tag_fertiliser">Fertiliser</option><option value="green" data-i18n-opt="tag_other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:.8rem;margin-bottom:0"><label class="form-label" data-i18n="notes">Notes</label><textarea class="form-textarea" id="diary-notes" data-i18n-ph="diary_notes_ph" placeholder="Inputs used, weather, yield, observations..."></textarea></div>
+        <button class="btn btn-primary" style="margin-top:1rem;width:100%;justify-content:center" onclick="addDiaryEntry()"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round" stroke-linejoin="round"/><line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="save_entry">Save Entry</span></button>
+      </div>
+      <p class="section-label-sm" data-i18n="all_entries">All Entries</p>
+      <div class="row-gap" id="diary-list"></div>
+    </div>
+
+    <!-- ── FORUM ── -->
+    <div class="page" id="page-forum">
+      <div class="page-header"><h2 data-i18n="forum_title">Farmer Forum</h2><p data-i18n="forum_sub">Share questions, tips, and updates with the farming community.</p></div>
+      <div class="card section-gap">
+        <div class="card-title"><svg viewBox="0 0 24 24" fill="none"><line x1="22" y1="2" x2="11" y2="13" stroke-linecap="round" stroke-linejoin="round"/><polygon points="22 2 15 22 11 13 2 9 22 2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="new_post">New Post</span></div>
+        <div class="form-row"><label class="form-label" data-i18n="post_title">Title</label><input class="form-input" id="forum-title" data-i18n-ph="post_title_ph" placeholder="e.g. Yellowing leaves on tomato crop — any advice?"/></div>
+        <div class="form-row"><label class="form-label" data-i18n="message">Message</label><textarea class="form-textarea" style="min-height:100px" id="forum-body" data-i18n-ph="message_ph" placeholder="Describe your question or share what you know..."></textarea></div>
+        <div class="form-row" style="margin-bottom:0"><label class="form-label" data-i18n="tag_label">Tag</label>
+          <select class="form-select" id="forum-tag">
+            <option value="green" data-i18n-opt="tag_general">General</option><option value="amber" data-i18n-opt="opt_pest_ctrl">Pest Control</option><option value="green" data-i18n-opt="tag_market">Market Rates</option><option value="amber" data-i18n-opt="tag_weather">Weather</option><option value="green" data-i18n-opt="tag_tip">Tip</option><option value="amber" data-i18n-opt="tag_help">Help Needed</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="addForumPost()"><svg viewBox="0 0 24 24" fill="none"><line x1="22" y1="2" x2="11" y2="13" stroke-linecap="round" stroke-linejoin="round"/><polygon points="22 2 15 22 11 13 2 9 22 2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="post_btn">Post</span></button>
+      </div>
+      <div class="row-gap" id="forum-list"></div>
+    </div>
+
+    <!-- ── PROFILE ── -->
+    <div class="page" id="page-profile">
+      <div class="page-header"><h2>My Profile</h2><p>Your account details and farm information.</p></div>
+
+      <div class="card section-gap">
+        <div class="profile-pic-section">
+          <div class="profile-pic-wrap">
+            <div class="profile-pic" id="profile-pic-display">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <label class="profile-pic-btn" title="Change photo">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="13" r="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <input type="file" id="profile-pic-input" accept="image/*" onchange="handleProfilePic(this)" style="display:none"/>
+            </label>
+          </div>
+          <div class="profile-name-block">
+            <h3 id="profile-display-name">—</h3>
+            <p id="profile-display-phone" style="font-size:.85rem;color:var(--muted)"></p>
+            <span class="tag tag-green" style="margin-top:.3rem;display:inline-block" id="profile-display-crop">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card section-gap">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Edit Details</span>
+        </div>
+        <div class="grid-2" style="gap:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label">Full Name</label><input class="form-input" id="edit-name" placeholder="e.g. Ramesh Kumar"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label">Mobile</label><input class="form-input" id="edit-phone" disabled style="opacity:.6;cursor:not-allowed" title="Phone cannot be changed"/></div>
+        </div>
+        <div class="grid-2" style="gap:.8rem;margin-top:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label">Village / Town</label><input class="form-input" id="edit-village" placeholder="e.g. Dharwad"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label">District</label><input class="form-input" id="edit-district" placeholder="e.g. Dharwad"/></div>
+        </div>
+        <div class="grid-2" style="gap:.8rem;margin-top:.8rem">
+          <div class="form-row" style="margin-bottom:0"><label class="form-label">State</label><input class="form-input" id="edit-state" placeholder="e.g. Karnataka"/></div>
+          <div class="form-row" style="margin-bottom:0"><label class="form-label">Land Holding (acres)</label><input class="form-input" id="edit-land" type="number" placeholder="e.g. 2" min="0" step="0.5"/></div>
+        </div>
+        <div class="form-row" style="margin-top:.8rem;margin-bottom:0"><label class="form-label">Primary Crop</label>
+          <select class="form-select" id="edit-crop">
+            <option value="">Select crop</option>
+            <option>Paddy / Rice</option><option>Wheat</option><option>Maize</option>
+            <option>Cotton</option><option>Sugarcane</option><option>Tomato</option>
+            <option>Onion</option><option>Potato</option><option>Soybean</option>
+            <option>Groundnut</option><option>Mixed / Other</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="saveProfile()">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22 4 12 14.01 9 11.01" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Save Changes
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Account</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.5rem">
+          <button class="btn" style="justify-content:flex-start;gap:.7rem;background:var(--bg);border:1px solid var(--border);color:var(--text)" onclick="changeLanguage()">
+            <svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px;stroke:var(--muted);stroke-width:1.8"><circle cx="12" cy="12" r="10" stroke-linecap="round" stroke-linejoin="round"/><line x1="2" y1="12" x2="22" y2="12" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Change Language
+          </button>
+          <button class="btn" style="justify-content:flex-start;gap:.7rem;background:var(--bg);border:1px solid var(--border);color:var(--text)" onclick="toggleDarkMode()">
+            <svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px;stroke:var(--muted);stroke-width:1.8"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Toggle Dark Mode
+          </button>
+          <button class="btn" style="justify-content:flex-start;gap:.7rem;background:var(--red-light);border:1px solid #f5c6c2;color:var(--red)" onclick="confirmSignOut()">
+            <svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px;stroke:var(--red);stroke-width:1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16 17 21 12 16 7" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── INFO CENTRE — MSP ── -->
+    <div class="page" id="page-info">
+      <div class="page-header">
+        <h2>Information Centre</h2>
+        <p>Minimum Support Prices (MSP) for all 22 mandated crops — updated for 2025–26 seasons.</p>
+      </div>
+
+      <!-- MSP EXPLAINER BANNER -->
+      <div class="msp-banner section-gap">
+        <div class="msp-banner-icon">📢</div>
+        <div>
+          <div class="msp-banner-title">What is MSP?</div>
+          <div class="msp-banner-text">The government guarantees you <strong>at least this price</strong> for your crop — even if the market rate falls below it. You can sell to government agencies at MSP or in the open market, whichever is higher.</div>
+        </div>
+      </div>
+
+      <!-- SEARCH + FILTER -->
+      <div class="msp-controls section-gap">
+        <div class="msp-search">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 21l-4.35-4.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <input type="text" id="msp-search" placeholder="Search crop…" oninput="filterMSP()"/>
+        </div>
+        <div class="msp-filter-tabs">
+          <button class="msp-tab active" data-season="all" onclick="setMSPSeason(this,'all')">All Crops</button>
+          <button class="msp-tab" data-season="kharif" onclick="setMSPSeason(this,'kharif')">🌧 Kharif</button>
+          <button class="msp-tab" data-season="rabi" onclick="setMSPSeason(this,'rabi')">☀️ Rabi</button>
+          <button class="msp-tab" data-season="commercial" onclick="setMSPSeason(this,'commercial')">🏭 Commercial</button>
+        </div>
+      </div>
+
+      <!-- MSP TABLE -->
+      <div id="msp-grid" class="msp-grid"></div>
+
+      <!-- SOURCE NOTE -->
+      <div class="msp-source">
+        📋 Source: Ministry of Agriculture & Farmers Welfare, Govt. of India · Kharif 2025–26 & Rabi 2026–27 · Prices per quintal (100 kg)
+        <a href="https://desagri.gov.in/statistics-type/latest-minimum-support-price-msp-statement/" target="_blank">Official Source ↗</a>
+      </div>
+    </div>
+
+  </div><!-- page-content -->
+</div><!-- main -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="bn-item active" data-page="home" onclick="goTo('home')"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="3" width="7" height="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="14" width="7" height="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="14" y="14" width="7" height="7" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="bn_home">Home</span></button>
+    <button class="bn-item" data-page="sell" onclick="goTo('sell')"><svg viewBox="0 0 24 24" fill="none"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="bn_sell">Sell</span></button>
+    <button class="bn-item" data-page="diary" onclick="goTo('diary')"><svg viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="bn_diary">Diary</span></button>
+    <button class="bn-item" data-page="forum" onclick="goTo('forum')"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="bn_forum">Forum</span></button>
+    <button class="bn-item bn-more" onclick="openDrawer()"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/></svg><span data-i18n="bn_more">More</span></button>
+  </div>
+</nav>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="mobileDrawer">
+  <div class="drawer-handle"></div>
+  <div class="drawer-farmer">
+    <div class="farmer-avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><div class="farmer-name" id="drawer-farmer-name">My Farm</div><div class="farmer-loc" id="drawer-farmer-loc">—</div></div>
+  </div>
+  <div class="drawer-items">
+    <div class="drawer-item" onclick="goTo('buy');closeDrawer()"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 10a4 4 0 01-8 0" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_buy">Buy Inputs</span></div>
+    <div class="drawer-item" onclick="goTo('storage');closeDrawer()"><svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_storage">Cold Storage</span></div>
+    <div class="drawer-item" onclick="goTo('credit');closeDrawer()"><svg viewBox="0 0 24 24" fill="none"><line x1="12" y1="1" x2="12" y2="23" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_credit">Credit &amp; Loans</span></div>
+    <div class="drawer-item" onclick="goTo('schemes');closeDrawer()"><svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_schemes">Schemes</span></div>
+    <div class="drawer-item" onclick="goTo('training');closeDrawer()"><svg viewBox="0 0 24 24" fill="none"><path d="M22 10v6M2 10l10-5 10 5-10 5z" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12v5c3 3 9 3 12 0v-5" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="nav_training">Training</span></div>
+    <!-- Sign out in drawer too for mobile -->
+    <div class="drawer-item" onclick="confirmSignOut()" style="color:var(--red)">
+      <svg viewBox="0 0 24 24" fill="none" style="stroke:var(--red)"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke-linecap="round" stroke-linejoin="round"/><polyline points="16 17 21 12 16 7" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Sign Out</span>
+    </div>
+  </div>
+  <button class="drawer-helpline" onclick="closeDrawer();openModal()"><svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="helplines">Helplines &amp; Crisis Support</span></button>
+</div>
+
+<!-- HELPLINE MODAL -->
+<div class="modal-overlay" id="helplineModal">
+  <div class="modal">
+    <h3 data-i18n="helpline_title">Helplines &amp; Support</h3>
+    <p data-i18n="helpline_sub">You are not alone. Reach out anytime — calls are free and confidential.</p>
+    <div class="helpline-item"><div class="hi-icon hi-red"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hi-text"><strong data-i18n="hl_icall">iCall — Mental Health</strong><span data-i18n="hl_icall_sub">Mon–Sat 8am–10pm</span></div><div class="hi-num">9152987821</div></div>
+    <div class="helpline-item"><div class="hi-icon hi-red"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="8" x2="12" y2="12" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hi-text"><strong data-i18n="hl_kiran">KIRAN — Crisis Support</strong><span data-i18n="hl_kiran_sub">24/7 · Free · Multilingual</span></div><div class="hi-num">1800-599-0019</div></div>
+    <div class="helpline-item"><div class="hi-icon hi-green"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22V12M12 12C12 7 7 3 3 3c0 5 3.5 9 9 9zM12 12c0-5 5-9 9-9-1 5-4.5 9-9 9z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hi-text"><strong data-i18n="hl_kcc">Kisan Call Centre</strong><span data-i18n="hl_kcc_sub">Agricultural expert advice</span></div><div class="hi-num">1800-180-1551</div></div>
+    <div class="helpline-item"><div class="hi-icon hi-green"><svg viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="hi-text"><strong data-i18n="hl_pmk">PM-KISAN Helpline</strong><span data-i18n="hl_pmk_sub">Scheme queries &amp; support</span></div><div class="hi-num">155261</div></div>
+    <button class="modal-close" onclick="closeModal()" data-i18n="close">Close</button>
+  </div>
+</div>
+
+
+<!-- CHATBOT -->
+<div class="chat-bubble" id="chat-bubble" onclick="toggleChat()">
+  <svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span class="chat-unread" id="chat-unread" style="display:none">1</span>
+</div>
+
+<div class="chat-window" id="chat-window">
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <div class="chat-avatar">🌾</div>
+      <div>
+        <div class="chat-name">AgriMitra Support</div>
+        <div class="chat-status">Ask me anything</div>
+      </div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">
+      <svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-suggestions" id="chat-suggestions">
+    <button onclick="sendSuggestion('How do I list my produce for sale?')">How do I sell produce?</button>
+    <button onclick="sendSuggestion('Which government schemes am I eligible for?')">Govt schemes?</button>
+    <button onclick="sendSuggestion('How do I track my loan?')">Track a loan?</button>
+    <button onclick="sendSuggestion('How do I change my language?')">Change language?</button>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Type your question…" onkeydown="if(event.key==='Enter')sendChat()"/>
+    <button class="chat-send" onclick="sendChat()">
+      <svg viewBox="0 0 24 24" fill="none"><line x1="22" y1="2" x2="11" y2="13" stroke-linecap="round" stroke-linejoin="round"/><polygon points="22 2 15 22 11 13 2 9 22 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="dashboard.js"></script>
+</body>
+</html>
